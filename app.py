@@ -8,13 +8,13 @@ import streamlit as st
 
 # Determine the working directory
 working_dir = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join("E:\Final Year\Projects\Plant Disease prediction System", 'plant_disease_prediction_model.h5')
+model_path = os.path.join('plant_disease_prediction_model.h5')
 
 # Load the pre-trained model
 model = tf.keras.models.load_model(model_path)
 
 # Load the class names
-class_indices = json.load(open(os.path.join("E:\Final Year\Projects\Plant Disease prediction System", 'class_indices.json')))
+class_indices = json.load(open(os.path.join('class_indices.json')))
 
 # Function to load and preprocess the image using Pillow
 def load_and_preprocess_image(image, target_size=(224, 224)):
