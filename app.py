@@ -4,16 +4,35 @@ from PIL import Image
 import numpy as np
 import tensorflow as tf
 import streamlit as st
+import gdown
 
-# Determine the working directory
-working_dir = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join("E:\\Final Year\\Projects\\Plant Disease prediction System", 'plant_disease_prediction_model.h5')
+# Google Drive file ID of the model
+GDRIVE_FILE_ID = "1UX81o6Tc_JKjpzj8IClIkAmCtLa_CgJP"
+
+# Paths for model and class indices
+model_file = "plant_disease_prediction_model.h5"
+class_indices_file = "class_indices.json"
+
+# Download model and class indices from Google Drive
+def download_model():
+    if not os.path.exists(model_file):
+        with st.spinner("Downloading model... This may take a while."):
+            gdown.download(f"https://drive.google.com/uc?id={GDRIVE_FILE_ID}", model_file, quiet=False)
+            st.success("Model downloaded successfully!")
+
+def load_class_indices():
+    if os.path.exists(class_indices_file):
+        return json.load(open(class_indices_file))
+    else:
+        st.error("Class indices file not found!")
+        return None
 
 # Load the pre-trained model
-model = tf.keras.models.load_model(model_path)
+download_model()
+model = tf.keras.models.load_model(model_file)
 
-# Load the class names
-class_indices = json.load(open(os.path.join("E:\\Final Year\\Projects\\Plant Disease prediction System", 'class_indices.json')))
+# Load class indices
+class_indices = load_class_indices()
 
 # Function to load and preprocess the image
 def load_and_preprocess_image(image, target_size=(224, 224)):
